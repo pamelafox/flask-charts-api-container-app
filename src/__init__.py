@@ -1,22 +1,41 @@
-from flask import Flask, render_template, request
+from io import BytesIO
 
-from .data import photos
+from flask import send_file
+from apiflask import APIFlask, Schema
+from apiflask.fields import Number, String, DelimitedList
+from apiflask.validators import Length
 
-app = Flask(__name__, template_folder="templates", static_folder="static")
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes
+
+app = APIFlask(__name__, docs_path=None)
 # Default browser cache to 5 minutes
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 300
 
 
-@app.route("/")
-def index():
-    return render_template("index.html", photos=photos)
+class BarChartParams(Schema):
+    title = String(required=False, validate=Length(0, 30), load_default="Bar chart")
+    xlabel = String(required=False, validate=Length(0, 30), load_default="Categories")
+    ylabel = String(required=False, validate=Length(0, 30), load_default="Values")
+    xvalues = DelimitedList(String, required=True)
+    yvalues = DelimitedList(Number, required=True)
 
 
-@app.route("/order")
-def order():
-    return render_template("order.html", photo=photos.get(request.args.get("photo_id")))
+@app.get("/bar_chart")
+@app.input(BarChartParams, location="query")
+def bar_chart(data):
+    print(data)
+    # Generate the figure **without using pyplot**.
+    fig = Figure()
+    axes: Axes = fig.subplots(squeeze=False)[0][0]
+    axes.bar(data["xvalues"], data["yvalues"])
+    axes.set_xlabel(data["xlabel"])
+    axes.set_ylabel(data["ylabel"])
+    axes.set_title(data["title"])
+    axes.set_ylim(bottom=0)
 
-
-@app.errorhandler(404)
-def handle_404(e):
-    return render_template("404.html")
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    buf.seek(0)
+    return send_file(buf, download_name="chart.png", mimetype="image/png")
