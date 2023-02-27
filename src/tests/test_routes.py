@@ -5,7 +5,7 @@ client = app.test_client()
 
 def test_bar_chart_required_only():
     response = client.get(
-        "/bar_chart",
+        "/charts/bar",
         query_string={
             "xvalues": "a,b,c",
             "yvalues": "1,2,3",
@@ -18,7 +18,7 @@ def test_bar_chart_required_only():
 
 def test_bar_chart_all_specified():
     response = client.get(
-        "/bar_chart",
+        "/charts/bar",
         query_string={
             "xvalues": "a,b,c",
             "yvalues": "1,2,3",
@@ -34,7 +34,7 @@ def test_bar_chart_all_specified():
 
 def test_pie_chart_required_only():
     response = client.get(
-        "/pie_chart",
+        "/charts/pie",
         query_string={
             "values": "1,2,3",
         },
@@ -46,7 +46,7 @@ def test_pie_chart_required_only():
 
 def test_pie_chart_all_params():
     response = client.get(
-        "/pie_chart",
+        "/charts/pie",
         query_string={
             "values": "1,2,3",
             "labels": "a,b,c",
@@ -60,7 +60,7 @@ def test_pie_chart_all_params():
 
 def test_pie_chart_invalid_labels():
     response = client.get(
-        "/pie_chart",
+        "/charts/pie",
         query_string={
             "values": "1,2,3",
             "labels": "a,b",
@@ -73,7 +73,7 @@ def test_pie_chart_invalid_labels():
 
 def test_pie_chart_invalid_value():
     response = client.get(
-        "/pie_chart",
+        "/charts/pie",
         query_string={"values": "0.0"},
     )
     assert response.status_code == 422
@@ -83,5 +83,5 @@ def test_pie_chart_invalid_value():
 def test_openapi_json():
     response = client.get("/openapi.json")
     assert response.status_code == 200
-    assert "image/png" in response.json["paths"]["/bar_chart"]["get"]["responses"]["200"]["content"]
-    assert "image/png" in response.json["paths"]["/pie_chart"]["get"]["responses"]["200"]["content"]
+    assert "image/png" in response.json["paths"]["/charts/bar"]["get"]["responses"]["200"]["content"]
+    assert "image/png" in response.json["paths"]["/charts/pie"]["get"]["responses"]["200"]["content"]

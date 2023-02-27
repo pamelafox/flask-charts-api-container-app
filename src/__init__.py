@@ -43,7 +43,7 @@ class BarChartParams(Schema):
     yvalues = DelimitedList(Number, required=True)
 
 
-@app.get("/bar_chart")
+@app.get("/charts/bar")
 @app.input(BarChartParams, location="query")
 def bar_chart(data: dict):
     fig = Figure()
@@ -69,7 +69,7 @@ class PieChartParams(Schema):
             raise ValidationError("Cannot create a pie chart with single value of 0")
 
 
-@app.get("/pie_chart")
+@app.get("/charts/pie")
 @app.input(PieChartParams, location="query")
 def pie_chart(data: dict):
     fig = Figure()

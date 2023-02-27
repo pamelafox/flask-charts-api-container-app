@@ -60,7 +60,7 @@ resource endpoint 'Microsoft.Cdn/profiles/endpoints@2022-05-01-preview' = {
                   operator: 'BeginsWith'
                   negateCondition: false
                   matchValues: [
-                    'static/images/'
+                    'charts/'
                   ]
                   transforms: ['Lowercase']
                   typeName: 'DeliveryRuleUrlPathMatchConditionParameters'
