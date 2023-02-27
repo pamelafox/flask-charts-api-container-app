@@ -67,14 +67,17 @@ You need to either have Docker Desktop installed or have this open in Github Cod
 2. Build the image:
 
     ```shell
-    docker build --tag flask-app .
+    docker build --tag flask-api .
     ```
 
 3. Run the image:
 
     ```shell
-    docker run --publish 5000:5000 flask-app
+    docker run --publish 5000:5000 flask-api
     ```
+
+4. Follow instructions above to test the API is working.
+
 ## Running tests
 
 This project uses [pytest](https://docs.pytest.org/en/stable/) for testing and [coverage](https://pypi.org/project/coverage/) for test coverage. Both are configured in `pyproject.toml`.
