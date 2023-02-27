@@ -1,12 +1,22 @@
-This repository includes a very simple Python Flask web site, made for demonstration purposes only.
+This sample Python Flask application builds a Charts API by using [APIFlask](https://apiflask.com/) with [matplotlib](https://matplotlib.org/) to return charts as PNG images.
+You can use this project as a starting point for your own Flask APIs.
 
-## Local development
 
-This project has devcontainer support, so you can open it in Github Codespaces or local VS Code with the Dev Containers extension.
+The repository is designed for use with [Docker containers](https://www.docker.com/), both for local development and deployment, and includes infrastructure files for deployment to [Azure Container Apps](https://learn.microsoft.com/azure/container-apps/overview). 🐳
 
-Steps for running the server:
+The code is
+tested with [pytest](https://docs.pytest.org/en/7.2.x/) and [schemathesis](https://schemathesis.readthedocs.io/en/stable/),
+linted with [ruff](https://github.com/charliermarsh/ruff), and formatted with [black](https://black.readthedocs.io/en/stable/).
+Code quality issues are all checked with both [pre-commit](https://pre-commit.com/) and Github actions.
 
-1. (Optional) If you're unable to open the devcontainer, [create a Python virtual environment](https://docs.python.org/3/tutorial/venv.html#creating-virtual-environments) and activate that.
+
+## Opening the project
+
+This project has [Dev Container support](https://code.visualstudio.com/docs/devcontainers/containers), so it will be be setup automatically if you open it in Github Codespaces or in local VS Code with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+
+If you're not using one of those options for opening the project, then you'll need to:
+
+1. Create a [Python virtual environment](https://docs.python.org/3/tutorial/venv.html#creating-virtual-environments) and activate it.
 
 2. Install the requirements:
 
@@ -14,16 +24,37 @@ Steps for running the server:
     python3 -m pip install -r requirements-dev.txt
     ```
 
-3. Run the local server: (or use VS Code "Run" button and select "Run server")
+3. Install the pre-commit hooks:
+
+    ```shell
+    pre-commit install
+    ```
+
+
+## Local development
+
+1. Run the local server:
 
     ```shell
     python3 -m flask --debug run
     ```
 
-3. Click 'http://127.0.0.1:5000' in the terminal, which should open the website in a new tab
-4. Confirm the photos load on the index page and click a photo to see the order page.
+2. Run the local server:
 
-  charts/bar?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5
+    ```shell
+    python3 -m flask --debug run
+    ```
+
+3. Click 'http://127.0.0.1:5000' in the terminal, which should open a new tab in the browser.
+
+4. Open the API specification at `/openapi.json`
+
+5. Try the API at these sample URLs:
+
+| URL | PNG output |
+| --- | --- | --- | --- | --- |
+| `charts/bar?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5` | ![Bar chart](readme_barchart.png) |
+| `charts/pie?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&labels=C,Ruby,Java,Python&values=10,20,15,30.5` | ![Pie chart](readme_piechart.png) |
 
 
 ### Local development with Docker
@@ -31,13 +62,15 @@ Steps for running the server:
 You can also run this app locally with Docker, thanks to the `Dockerfile`.
 You need to either have Docker Desktop installed or have this open in Github Codespaces for these commands to work.
 
-1. Build the image:
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/). If you opened this inside Github Codespaces or a Dev Container in VS Code, installation is not needed. ⚠️ If you're on an Apple M1/M2, you won't be able to run `docker` commands inside a Dev Container; either use Codespaces or do not open the Dev Container.
+
+2. Build the image:
 
     ```shell
     docker build --tag flask-app .
     ```
 
-2. Run the image:
+3. Run the image:
 
     ```shell
     docker run --publish 5000:5000 flask-app
@@ -65,6 +98,8 @@ Both commands are also run as part of the CI/CD pipeline.
 
 This repo is set up for deployment on [Azure Container Apps](https://learn.microsoft.com/azure/container-apps/overview) using the configuration files in the `infra` folder.
 
+This diagram shows the architecture of the deployment:
+
 ![Diagram of architecture using Azure Container Apps, Azure Container Registry and an Azure CDN in front](readme_diagram.png)
 
 Steps for deployment:
@@ -77,9 +112,9 @@ Steps for deployment:
     azd up
     ```
 
-    It will prompt you to login and to provide a name (like "flask-app") and location (like "eastus"). Then it will provision the resources in your account and deploy the latest code. If you get an error with deployment, changing the location (like to "centralus") can help, as there are availability constraints for some of the resources.
+    It will prompt you to login and to provide a name (like "flaskcharts") and location. Then it will provision the resources in your account and deploy the latest code.
 
-4. When `azd` has finished deploying, you'll see an endpoint URI in the command output. Visit that URI, and you should see the front page of the app! 🎉
+4. When `azd` has finished deploying, you'll see an endpoint URI in the command output. Visit that URI and append `charts/bar?xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5` to see a bar chart PNG.
 
 5. When you've made any changes to the app code, you can just run:
 
@@ -97,15 +132,23 @@ to be stored as Github action secrets. To set that up, run:
 azd pipeline config
 ```
 
+
 ### Costs
 
-These are only provided as an example, as of Feb-2023. The PostgreSQL server has an hourly cost, so if you are not actively using the app, remember to run `azd down` or delete the resource group to avoid unnecessary costs.
+Pricing varies per region and usage, so it isn't possible to predict exact costs for your usage.
+The majority of the Azure resources used in this infrastructure are on usage-based pricing tiers.
+However, Azure Container Registry has a fixed cost per registry per day.
 
-- Azure CDN - Standard tier, $0.081 per GB for first 10 TB per month. [Pricing](https://azure.microsoft.com/pricing/details/cdn/)
-- Azure Container App - Consumption tier with 0.5 CPU, 1GiB memory/storage Pricing is based on resource allocation, and each month allows for a certain amount of free usage, ~$2/month. [Pricing](https://azure.microsoft.com/pricing/details/container-apps/)
-- Azure Container Registry - Basic tier. $0.167/day, ~$5/month. [Pricing](https://azure.microsoft.com/pricing/details/container-registry/)
-- Key Vault - Standard tier. $0.04/10,000 transactions. Only a few transactions are used on each deploy. [Pricing](https://azure.microsoft.com/pricing/details/key-vault/)
+You can try the [Azure pricing calculator](https://azure.com/e/fb285cfc051547899f4535cc0f41dc01) for the resources:
 
+- Azure Container App: Consumption tier with 0.5 CPU, 1GiB memory/storage. Pricing is based on resource allocation, and each month allows for a certain amount of free usage. [Pricing](https://azure.microsoft.com/pricing/details/container-apps/)
+- Azure Container Registry: Basic tier. [Pricing](https://azure.microsoft.com/pricing/details/container-registry/)
+- Azure CDN: Standard tier. [Pricing](https://azure.microsoft.com/pricing/details/cdn/)
+- Key Vault: Standard tier. Costs are per transaction, a few transactions are used on each deploy. [Pricing](https://azure.microsoft.com/pricing/details/key-vault/)
+- Log analytics: Pay-as-you-go tier. Costs based on data ingested. [Pricing](https://azure.microsoft.com/pricing/details/monitor/)
+
+⚠️ To avoid unnecessary costs, remember to take down your app if it's no longer in use,
+either by deleting the resource group in the Portal or running `azd down`.
 
 ## Getting help
 
