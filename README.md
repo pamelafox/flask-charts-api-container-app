@@ -1,6 +1,7 @@
 This sample Python Flask application builds a Charts API by using [APIFlask](https://apiflask.com/) with [matplotlib](https://matplotlib.org/) to return charts as PNG images.
 You can use this project as a starting point for your own Flask APIs.
 
+![Chart API URLs on the left side with Chart outputs on right side](readme_output.png)
 
 The repository is designed for use with [Docker containers](https://www.docker.com/), both for local development and deployment, and includes infrastructure files for deployment to [Azure Container Apps](https://learn.microsoft.com/azure/container-apps/overview). 🐳
 
@@ -51,10 +52,9 @@ If you're not using one of those options for opening the project, then you'll ne
 
 5. Try the API at these sample URLs:
 
-| URL | PNG output |
-| --- | --- | --- | --- | --- |
-| `charts/bar?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5` | ![Bar chart](readme_barchart.png) |
-| `charts/pie?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&labels=C,Ruby,Java,Python&values=10,20,15,30.5` | ![Pie chart](readme_piechart.png) |
+    `charts/bar?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5`
+
+    `charts/pie?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&labels=C,Ruby,Java,Python&values=10,20,15,30.5`
 
 
 ### Local development with Docker
@@ -77,22 +77,23 @@ You need to either have Docker Desktop installed or have this open in Github Cod
     ```
 ## Running tests
 
-This project uses [pytest](https://docs.pytest.org/en/stable/) for testing and coverage for test coverage.
+This project uses [pytest](https://docs.pytest.org/en/stable/) for testing and [coverage](https://pypi.org/project/coverage/) for test coverage. Both are configured in `pyproject.toml`.
 
-To run the tests, run:
+Run the unit tests:
 
 ```shell
 python3 -m pytest
 ```
 
-This project also uses [schemathesis](https://schemathesis.readthedocs.io/en/stable/) to run property-based tests based
-on the generated OpenAPI schema. To run those tests, run:
+This project also uses [schemathesis](https://schemathesis.readthedocs.io/en/stable/) to run property-based tests based on the generated OpenAPI schema.
+
+Run property-based tests:
 
 ```shell
 python3 -m. pytest src/tests/property_based.py
 ```
 
-Both commands are also run as part of the CI/CD pipeline.
+Both commands are also run as part of the CI/CD pipeline. If test coverage falls below 100%s, the pipeline will fail.
 
 ## Deployment
 
