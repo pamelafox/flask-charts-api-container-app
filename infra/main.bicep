@@ -54,25 +54,61 @@ module containerApps 'core/host/container-apps.bicep' = {
 }
 
 // CDN in front
-module cdnProfile 'cdn-profile.bicep' = {
+module cdn 'core/cdn/cdn.bicep' = {
   name: 'cdn-profile'
   scope: resourceGroup
   params: {
-    name: '${prefix}-cdn-profile'
-    location: location
-    tags: tags
-  }
-}
-
-module cdnEndpoint 'cdn-endpoint.bicep' = {
-  name: 'cdn-endpoint'
-  scope: resourceGroup
-  params: {
-    name: '${prefix}-cdn-endpoint'
     location: location
     tags: tags
     cdnProfileName: '${prefix}-cdn-profile'
+    cdnEndpointName: '${prefix}-cdn-endpoint'
     originUrl: last(split(web.outputs.appUri, '//'))
+    deliveryPolicyRules: [
+      {
+        name: 'Global'
+        order: 0
+        actions: [
+          {
+            name: 'CacheExpiration'
+            parameters: {
+                cacheBehavior: 'SetIfMissing'
+                cacheType: 'All'
+                cacheDuration: '00:05:00'
+                typeName: 'DeliveryRuleCacheExpirationActionParameters'
+            }
+          }
+        ]
+      }
+      {
+        name: 'images'
+        order: 1
+        conditions: [
+          {
+            name: 'UrlPath'
+            parameters: {
+                operator: 'BeginsWith'
+                negateCondition: false
+                matchValues: [
+                  'charts/'
+                ]
+                transforms: ['Lowercase']
+                typeName: 'DeliveryRuleUrlPathMatchConditionParameters'
+            }
+          }
+        ]
+        actions: [
+          {
+            name: 'CacheExpiration'
+            parameters: {
+                cacheBehavior: 'Override'
+                cacheType: 'All'
+                cacheDuration: '7.00:00:00'
+                typeName: 'DeliveryRuleCacheExpirationActionParameters'
+            }
+          }
+        ]
+      }
+    ]
   }
 }
 
@@ -109,6 +145,6 @@ output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
 output SERVICE_WEB_IDENTITY_PRINCIPAL_ID string = web.outputs.SERVICE_WEB_IDENTITY_PRINCIPAL_ID
 output SERVICE_WEB_NAME string = web.outputs.SERVICE_WEB_NAME
-output SERVICE_WEB_ENDPOINTS array = [cdnEndpoint.outputs.uri]
+output SERVICE_WEB_ENDPOINTS array = [cdn.outputs.uri]
 output SERVICE_WEB_IMAGE_NAME string = web.outputs.SERVICE_WEB_IMAGE_NAME
 output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
