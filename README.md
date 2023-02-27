@@ -22,7 +22,8 @@ Steps for running the server:
 
 3. Click 'http://127.0.0.1:5000' in the terminal, which should open the website in a new tab
 4. Confirm the photos load on the index page and click a photo to see the order page.
-  /bar_chart?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5
+
+  charts/bar?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5
 
 
 ### Local development with Docker

@@ -9,8 +9,8 @@ param name string
 @description('Primary location for all resources')
 param location string
 
-@description('The image name for the web service')
-param webImageName string = ''
+@description('The image name for the API service')
+param apiImageName string = ''
 
 @description('Id of the user or app to assign application roles')
 param principalId string = ''
@@ -32,7 +32,7 @@ module keyVault './core/security/keyvault.bicep' = {
   name: 'keyvault'
   scope: resourceGroup
   params: {
-    name: '${take(prefix, 17)}-vault'
+    name: '${take(replace(prefix, '-', ''), 17)}-vault'
     location: location
     tags: tags
     principalId: principalId
@@ -54,37 +54,73 @@ module containerApps 'core/host/container-apps.bicep' = {
 }
 
 // CDN in front
-module cdnProfile 'cdn-profile.bicep' = {
-  name: 'cdn-profile'
+module cdn 'core/cdn/cdn.bicep' = {
+  name: 'cdn'
   scope: resourceGroup
   params: {
-    name: '${prefix}-cdn-profile'
-    location: location
-    tags: tags
-  }
-}
-
-module cdnEndpoint 'cdn-endpoint.bicep' = {
-  name: 'cdn-endpoint'
-  scope: resourceGroup
-  params: {
-    name: '${prefix}-cdn-endpoint'
     location: location
     tags: tags
     cdnProfileName: '${prefix}-cdn-profile'
-    originUrl: last(split(web.outputs.appUri, '//'))
+    cdnEndpointName: '${prefix}-cdn-endpoint'
+    originUrl: last(split(api.outputs.appUri, '//'))
+    deliveryPolicyRules: [
+      {
+        name: 'Global'
+        order: 0
+        actions: [
+          {
+            name: 'CacheExpiration'
+            parameters: {
+                cacheBehavior: 'SetIfMissing'
+                cacheType: 'All'
+                cacheDuration: '00:05:00'
+                typeName: 'DeliveryRuleCacheExpirationActionParameters'
+            }
+          }
+        ]
+      }
+      {
+        name: 'images'
+        order: 1
+        conditions: [
+          {
+            name: 'UrlPath'
+            parameters: {
+                operator: 'BeginsWith'
+                negateCondition: false
+                matchValues: [
+                  'charts/'
+                ]
+                transforms: ['Lowercase']
+                typeName: 'DeliveryRuleUrlPathMatchConditionParameters'
+            }
+          }
+        ]
+        actions: [
+          {
+            name: 'CacheExpiration'
+            parameters: {
+                cacheBehavior: 'Override'
+                cacheType: 'All'
+                cacheDuration: '7.00:00:00'
+                typeName: 'DeliveryRuleCacheExpirationActionParameters'
+            }
+          }
+        ]
+      }
+    ]
   }
 }
 
-// Web frontend
-module web 'web.bicep' = {
-  name: 'web'
+// API on ACA
+module api 'api.bicep' = {
+  name: 'api'
   scope: resourceGroup
   params: {
     name: '${take(prefix,19)}-containerapp'
     location: location
     tags: tags
-    imageName: webImageName
+    imageName: apiImageName
     containerAppsEnvironmentName: containerApps.outputs.environmentName
     containerRegistryName: containerApps.outputs.registryName
     keyVaultName: keyVault.outputs.name
@@ -107,8 +143,8 @@ output AZURE_LOCATION string = location
 output AZURE_CONTAINER_ENVIRONMENT_NAME string = containerApps.outputs.environmentName
 output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
-output SERVICE_WEB_IDENTITY_PRINCIPAL_ID string = web.outputs.SERVICE_WEB_IDENTITY_PRINCIPAL_ID
-output SERVICE_WEB_NAME string = web.outputs.SERVICE_WEB_NAME
-output SERVICE_WEB_ENDPOINTS array = [cdnEndpoint.outputs.uri]
-output SERVICE_WEB_IMAGE_NAME string = web.outputs.SERVICE_WEB_IMAGE_NAME
+output SERVICE_API_IDENTITY_PRINCIPAL_ID string = api.outputs.SERVICE_API_IDENTITY_PRINCIPAL_ID
+output SERVICE_API_NAME string = api.outputs.SERVICE_API_NAME
+output SERVICE_API_ENDPOINTS array = [cdn.outputs.uri]
+output SERVICE_API_IMAGE_NAME string = api.outputs.SERVICE_API_IMAGE_NAME
 output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
