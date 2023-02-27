@@ -22,6 +22,7 @@ Steps for running the server:
 
 3. Click 'http://127.0.0.1:5000' in the terminal, which should open the website in a new tab
 4. Confirm the photos load on the index page and click a photo to see the order page.
+  /bar_chart?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5
 
 
 ### Local development with Docker
@@ -40,6 +41,24 @@ You need to either have Docker Desktop installed or have this open in Github Cod
     ```shell
     docker run --publish 5000:5000 flask-app
     ```
+## Running tests
+
+This project uses [pytest](https://docs.pytest.org/en/stable/) for testing and coverage for test coverage.
+
+To run the tests, run:
+
+```shell
+python3 -m pytest
+```
+
+This project also uses [schemathesis](https://schemathesis.readthedocs.io/en/stable/) to run property-based tests based
+on the generated OpenAPI schema. To run those tests, run:
+
+```shell
+python3 -m. pytest src/tests/property_based.py
+```
+
+Both commands are also run as part of the CI/CD pipeline.
 
 ## Deployment
 
