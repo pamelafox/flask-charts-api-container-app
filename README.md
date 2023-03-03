@@ -93,7 +93,7 @@ This project also uses [schemathesis](https://schemathesis.readthedocs.io/en/sta
 Run property-based tests:
 
 ```shell
-python3 -m. pytest src/tests/property_based.py
+python3 -m pytest src/tests/property_based.py
 ```
 
 Both commands are also run as part of the CI/CD pipeline. If test coverage falls below 100%s, the pipeline will fail.
