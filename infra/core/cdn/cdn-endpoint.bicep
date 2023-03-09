@@ -20,7 +20,7 @@ resource endpoint 'Microsoft.Cdn/profiles/endpoints@2022-05-01-preview' = {
   tags: tags
   properties: {
     originHostHeader: originUrl
-    isHttpAllowed: true
+    isHttpAllowed: false
     isHttpsAllowed: true
     queryStringCachingBehavior: 'UseQueryString'
     optimizationType: 'GeneralWebDelivery'
@@ -47,3 +47,5 @@ resource cdnProfile 'Microsoft.Cdn/profiles@2022-05-01-preview' existing = {
 }
 
 output uri string = 'https://${endpoint.properties.hostName}'
+output id string = endpoint.id
+output name string = endpoint.name
