@@ -40,17 +40,11 @@ If you're not using one of those options for opening the project, then you'll ne
     python3 -m flask --debug run
     ```
 
-2. Run the local server:
+2. Click 'http://127.0.0.1:5000' in the terminal, which should open a new tab in the browser.
 
-    ```shell
-    python3 -m flask --debug run
-    ```
+3. Open the API specification at `/openapi.json`
 
-3. Click 'http://127.0.0.1:5000' in the terminal, which should open a new tab in the browser.
-
-4. Open the API specification at `/openapi.json`
-
-5. Try the API at these sample URLs:
+4. Try the API at these sample URLs:
 
     `charts/bar?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5`
 

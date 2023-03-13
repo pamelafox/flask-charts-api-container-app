@@ -54,7 +54,7 @@ module containerApps 'core/host/container-apps.bicep' = {
 }
 
 // CDN in front
-module cdn 'core/cdn/cdn.bicep' = {
+module cdn 'core/networking/cdn.bicep' = {
   name: 'cdn'
   scope: resourceGroup
   params: {
