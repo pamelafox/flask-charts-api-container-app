@@ -1,18 +1,22 @@
 [tool.ruff]
 select = ["E", "F", "I", "UP"]
 target-version = "py311"
-line-length = 120
+line-length = 200
 
 [tool.black]
 target-version =  ["py311"]
-line-length = 120
+line-length = 200
 
 [tool.pytest.ini_options]
-addopts = "-ra --cov=src"
-testpaths = [
-    "src/tests/"
+addopts = [
+    "-ra",
+    "--cov=src",
+    "--import-mode=importlib"
 ]
-pythonpath = ['.']
+pythonpath = "src"
+testpaths = [
+    "src/api/"
+]
 filterwarnings = [
     "ignore:Glyph:UserWarning"
 ]
