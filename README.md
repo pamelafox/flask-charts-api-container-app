@@ -22,7 +22,7 @@ If you're not using one of those options for opening the project, then you'll ne
 2. Install the requirements:
 
     ```shell
-    python3 -m pip install -r requirements-dev.txt
+    python3 -m pip install -r src/requirements-dev.txt
     ```
 
 3. Install the pre-commit hooks:
@@ -37,7 +37,7 @@ If you're not using one of those options for opening the project, then you'll ne
 1. Run the local server:
 
     ```shell
-    python3 -m flask --debug run
+    python3 -m flask --debug --app src/api:app run --port 5000
     ```
 
 2. Click 'http://127.0.0.1:5000' in the terminal, which should open a new tab in the browser.
@@ -61,7 +61,7 @@ You need to either have Docker Desktop installed or have this open in Github Cod
 2. Build the image:
 
     ```shell
-    docker build --tag flask-api .
+    docker build --tag flask-api src/
     ```
 
 3. Run the image:

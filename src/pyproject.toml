@@ -10,9 +10,8 @@ line-length = 120
 [tool.pytest.ini_options]
 addopts = "-ra --cov=src"
 testpaths = [
-    "src/tests/"
+    "src/api/tests/"
 ]
-pythonpath = ['.']
 filterwarnings = [
     "ignore:Glyph:UserWarning"
 ]
