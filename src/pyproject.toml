@@ -8,9 +8,14 @@ target-version =  ["py311"]
 line-length = 200
 
 [tool.pytest.ini_options]
-addopts = "-ra --cov=src"
+addopts = [
+    "-ra",
+    "--cov=src",
+    "--import-mode=importlib"
+]
+pythonpath = "src"
 testpaths = [
-    "src/api/tests/"
+    "src/api/"
 ]
 filterwarnings = [
     "ignore:Glyph:UserWarning"
