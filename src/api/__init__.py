@@ -13,26 +13,16 @@ app = APIFlask(__name__, docs_path=None)
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 300
 
 
-# Needed due to https://github.com/apiflask/apiflask/issues/357
-@app.spec_processor
-def update_spec(spec):
-    for path in spec["paths"]:
-        spec["paths"][path]["get"]["responses"]["200"]["content"] = {
-            "image/png": {
-                "schema": {
-                    "type": "string",
-                }
-            }
-        }
-    return spec
-
-
 def send_figure_as_png(fig: Figure) -> Response:
     # Save it to a temporary buffer.
     buf = BytesIO()
     fig.savefig(buf, format="png")
     buf.seek(0)
     return send_file(buf, download_name="chart.png", mimetype="image/png")
+
+
+class ImageOutSchema(Schema):
+    pass
 
 
 class BarChartParams(Schema):
@@ -45,9 +35,10 @@ class BarChartParams(Schema):
 
 @app.get("/charts/bar")
 @app.input(BarChartParams, location="query")
+@app.output(ImageOutSchema, content_type="image/png")
 def bar_chart(data: dict):
     fig = Figure()
-    axes: Axes = fig.subplots(squeeze=False)[0][0]
+    axes: Axes = fig.add_subplot()
     axes.bar(data["xvalues"], data["yvalues"])
     axes.set_xlabel(data.get("xlabel", ""))
     axes.set_ylabel(data.get("ylabel", ""))
@@ -71,9 +62,10 @@ class PieChartParams(Schema):
 
 @app.get("/charts/pie")
 @app.input(PieChartParams, location="query")
+@app.output(ImageOutSchema, content_type="image/png")
 def pie_chart(data: dict):
     fig = Figure()
-    axes: Axes = fig.subplots(squeeze=False)[0][0]
+    axes: Axes = fig.add_subplot()
     axes.pie(data["values"], labels=data.get("labels"))
     axes.set_title(data.get("title"))
     return send_figure_as_png(fig)
