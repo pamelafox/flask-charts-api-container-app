@@ -1,16 +1,18 @@
 import io
 import math
+import os
 
 import PIL
 
-from src.api import app
+from api import app
 
 client = app.test_client()
 
 
 def assert_image_equal(response_data, baseline_filename):
     image1 = PIL.Image.open(io.BytesIO(response_data))
-    image2 = PIL.Image.open(f"tests/saved_images/{baseline_filename}")
+    tests_path = os.path.dirname(os.path.abspath(__file__))
+    image2 = PIL.Image.open(f"{tests_path}/saved_images/{baseline_filename}")
     assert image1.size == image2.size
     assert image1.mode == image2.mode
     # Based on https://stackoverflow.com/a/55251080/1347623
