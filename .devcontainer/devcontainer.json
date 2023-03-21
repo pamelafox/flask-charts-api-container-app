@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.245.0/containers/python-3
 {
-	"name": "flask-gallery-container-app",
+	"name": "flask-charts-api-container-app",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
@@ -51,7 +51,7 @@
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [5000],
+	"forwardPorts": [50505],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "pip install -r requirements-dev.txt && pre-commit install",

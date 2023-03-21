@@ -1,6 +1,25 @@
-from src import app
+import io
+import math
+import os
+
+import PIL
+
+from api import app
 
 client = app.test_client()
+
+
+def assert_image_equal(response_data, baseline_filename):
+    image1 = PIL.Image.open(io.BytesIO(response_data))
+    tests_path = os.path.dirname(os.path.abspath(__file__))
+    image2 = PIL.Image.open(f"{tests_path}/saved_images/{baseline_filename}")
+    assert image1.size == image2.size
+    assert image1.mode == image2.mode
+    # Based on https://stackoverflow.com/a/55251080/1347623
+    diff = PIL.ImageChops.difference(image1, image2).histogram()
+    sq = (value * (i % 256) ** 2 for i, value in enumerate(diff))
+    rms = math.sqrt(sum(sq) / float(image1.size[0] * image1.size[1]))
+    assert rms < 90
 
 
 def test_bar_chart_required_only():
@@ -14,6 +33,7 @@ def test_bar_chart_required_only():
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "image/png"
     assert response.headers["Content-Disposition"] == "inline; filename=chart.png"
+    assert_image_equal(response.data, "bar_chart_required_only.png")
 
 
 def test_bar_chart_all_specified():
@@ -30,6 +50,7 @@ def test_bar_chart_all_specified():
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "image/png"
     assert response.headers["Content-Disposition"] == "inline; filename=chart.png"
+    assert_image_equal(response.data, "bar_chart_all_specified.png")
 
 
 def test_pie_chart_required_only():
@@ -42,6 +63,7 @@ def test_pie_chart_required_only():
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "image/png"
     assert response.headers["Content-Disposition"] == "inline; filename=chart.png"
+    assert_image_equal(response.data, "pie_chart_required_only.png")
 
 
 def test_pie_chart_all_params():
@@ -56,6 +78,7 @@ def test_pie_chart_all_params():
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "image/png"
     assert response.headers["Content-Disposition"] == "inline; filename=chart.png"
+    assert_image_equal(response.data, "pie_chart_all_params.png")
 
 
 def test_pie_chart_invalid_labels():

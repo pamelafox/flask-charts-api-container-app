@@ -37,20 +37,14 @@ If you're not using one of those options for opening the project, then you'll ne
 1. Run the local server:
 
     ```shell
-    python3 -m flask --debug run
+    python3 -m flask --debug --app src/api:app run --port 50505
     ```
 
-2. Run the local server:
+2. Click 'http://127.0.0.1:50505' in the terminal, which should open a new tab in the browser.
 
-    ```shell
-    python3 -m flask --debug run
-    ```
+3. Open the API specification at `/openapi.json`
 
-3. Click 'http://127.0.0.1:5000' in the terminal, which should open a new tab in the browser.
-
-4. Open the API specification at `/openapi.json`
-
-5. Try the API at these sample URLs:
+4. Try the API at these sample URLs:
 
     `charts/bar?title=Enrolled%20students&xlabel=Courses%20offered&ylabel=Number%20enrolled&xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5`
 
@@ -67,13 +61,13 @@ You need to either have Docker Desktop installed or have this open in Github Cod
 2. Build the image:
 
     ```shell
-    docker build --tag flask-api .
+    docker build --tag flask-api src/
     ```
 
 3. Run the image:
 
     ```shell
-    docker run --publish 5000:5000 flask-api
+    docker run --publish 50505:50505 flask-api
     ```
 
 4. Follow instructions above to test the API is working.
@@ -93,7 +87,7 @@ This project also uses [schemathesis](https://schemathesis.readthedocs.io/en/sta
 Run property-based tests:
 
 ```shell
-python3 -m. pytest src/tests/property_based.py
+python3 -m pytest src/tests/property_based.py
 ```
 
 Both commands are also run as part of the CI/CD pipeline. If test coverage falls below 100%s, the pipeline will fail.

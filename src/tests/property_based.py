@@ -2,7 +2,7 @@ import pytest
 import schemathesis
 from hypothesis import settings
 
-from src import app
+from api import app
 
 schema = schemathesis.from_wsgi("/openapi.json", app)
 

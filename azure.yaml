@@ -1,10 +1,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
-name: simple-flask-container-app
-
+name: flask-charts-api-container-app
+metadata:
+  template: flask-charts-api-container-app@0.0.1-beta
 services:
   api:
-    project: .
+    project: ./src
     module: api
     language: py
     host: containerapp
