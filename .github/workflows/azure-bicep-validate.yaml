@@ -19,12 +19,12 @@ jobs:
       - name: Build Bicep for linting
         uses: azure/CLI@v1
         with:
-          inlineScript: az bicep build -f infra/main.bicep --stdout
+          inlineScript: az config set bicep.use_binary_from_path=false && az bicep build -f infra/main.bicep
 
       - name: Run Microsoft Security DevOps Analysis
         uses: microsoft/security-devops-action@preview
         env:
-          GDN_TEMPLATEANALYZER_VERBOSE: 1
+          GDN_TEMPLATEANALYZER_VERBOSE: 0
         id: msdo
         with:
           tools: templateanalyzer

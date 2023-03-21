@@ -1,14 +1,18 @@
 // Module to create a CDN profile with a single endpoint
-param cdnProfileName string
-param cdnEndpointName string
 param location string = resourceGroup().location
 param tags object = {}
 
-@description('Origin URL for the CDN endpoint')
-param originUrl string
+@description('Name of the CDN endpoint resource')
+param cdnEndpointName string
+
+@description('Name of the CDN profile resource')
+param cdnProfileName string
 
 @description('Delivery policy rules')
 param deliveryPolicyRules array = []
+
+@description('Origin URL for the CDN endpoint')
+param originUrl string
 
 module cdnProfile 'cdn-profile.bicep' = {
   name: 'cdn-profile'
@@ -31,4 +35,8 @@ module cdnEndpoint 'cdn-endpoint.bicep' = {
   }
 }
 
+output endpointName string = cdnEndpoint.outputs.name
+output endpointId string = cdnEndpoint.outputs.id
+output profileName string = cdnProfile.outputs.name
+output profileId string = cdnProfile.outputs.id
 output uri string = cdnEndpoint.outputs.uri
