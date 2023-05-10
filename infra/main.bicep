@@ -62,7 +62,7 @@ module cdn 'core/networking/cdn.bicep' = {
     tags: tags
     cdnProfileName: '${prefix}-cdn-profile'
     cdnEndpointName: '${prefix}-cdn-endpoint'
-    originUrl: last(split(api.outputs.appUri, '//'))
+    originUrl: '${last(split(api.outputs.appUri, '//'))}'
     deliveryPolicyRules: [
       {
         name: 'Global'
