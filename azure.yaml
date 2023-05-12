@@ -2,10 +2,9 @@
 
 name: flask-charts-api-container-app
 metadata:
-  template: flask-charts-api-container-app@0.0.1-beta
+  template: flask-charts-api-container-app@0.0.2-beta
 services:
   api:
     project: ./src
-    module: api
     language: py
     host: containerapp

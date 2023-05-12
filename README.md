@@ -1,3 +1,8 @@
+[![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=pamelafox%2Fflask-charts-api-container-app&machine=standardLinux32gb&devcontainer_path=.devcontainer%2Fdevcontainer.json&location=WestUs2)
+[![Open in Remote - Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com%2Fpamelafox%2Fflask-charts-api-container-app)
+
+# Charts API app
+
 This sample Python Flask application builds a Charts API by using [APIFlask](https://apiflask.com/) with [matplotlib](https://matplotlib.org/) to return charts as PNG images.
 You can use this project as a starting point for your own Flask APIs.
 
@@ -102,23 +107,20 @@ This diagram shows the architecture of the deployment:
 
 Steps for deployment:
 
-1. Sign up for a [free Azure account](https://azure.microsoft.com/free/)
-2. Install the [Azure Dev CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd). (If you opened this repository in a devcontainer, that part will be done for you.)
-3. Initialize a new `azd` environment:
+1. Sign up for a [free Azure account](https://azure.microsoft.com/free/) and create an Azure Subscription.
+2. Install the [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd). (If you open this repository in Codespaces or with the VS Code Dev Containers extension, that part will be done for you.)
+3. Login to Azure:
 
     ```shell
-    azd init
+    azd auth login
     ```
 
-    It will prompt you to provide a name (like "flask-app") that will later be used in the name of the deployed resources.
-    
 4. Provision and deploy all the resources:
 
     ```shell
     azd up
     ```
-
-    It will prompt you to login, pick a subscription, and provide a location (like "eastus"). Then it will provision the resources in your account and deploy the latest code.
+    It will prompt you to provide an `azd` environment name (like "flaskapi"), select a subscription from your Azure account, and select a location (like "eastus"). Then it will provision the resources in your account and deploy the latest code. If you get an error with deployment, changing the location can help, as there may be availability constraints for some of the resources.
 
 5. When `azd` has finished deploying, you'll see an endpoint URI in the command output. Visit that URI and append `charts/bar?xvalues=C,Ruby,Java,Python&yvalues=10,20,15,30.5` to see a bar chart PNG.
 
@@ -128,7 +130,7 @@ Steps for deployment:
     azd deploy
     ```
 
-## CI/CD pipeline
+### CI/CD pipeline
 
 This project includes a Github workflow for deploying the resources to Azure
 on every push to main. That workflow requires several Azure-related authentication secrets
@@ -145,12 +147,11 @@ Pricing varies per region and usage, so it isn't possible to predict exact costs
 The majority of the Azure resources used in this infrastructure are on usage-based pricing tiers.
 However, Azure Container Registry has a fixed cost per registry per day.
 
-You can try the [Azure pricing calculator](https://azure.com/e/fb285cfc051547899f4535cc0f41dc01) for the resources:
+You can try the [Azure pricing calculator](https://azure.com/e/3736212c6e4b4ffe879830eb6fb75abf) for the resources:
 
 - Azure Container App: Consumption tier with 0.5 CPU, 1GiB memory/storage. Pricing is based on resource allocation, and each month allows for a certain amount of free usage. [Pricing](https://azure.microsoft.com/pricing/details/container-apps/)
 - Azure Container Registry: Basic tier. [Pricing](https://azure.microsoft.com/pricing/details/container-registry/)
 - Azure CDN: Standard tier. [Pricing](https://azure.microsoft.com/pricing/details/cdn/)
-- Key Vault: Standard tier. Costs are per transaction, a few transactions are used on each deploy. [Pricing](https://azure.microsoft.com/pricing/details/key-vault/)
 - Log analytics: Pay-as-you-go tier. Costs based on data ingested. [Pricing](https://azure.microsoft.com/pricing/details/monitor/)
 
 ⚠️ To avoid unnecessary costs, remember to take down your app if it's no longer in use,
