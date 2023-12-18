@@ -36,13 +36,13 @@ class BarChartParams(Schema):
 @app.get("/charts/bar")
 @app.input(BarChartParams, location="query")
 @app.output(ImageOutSchema, content_type="image/png")
-def bar_chart(data: dict):
+def bar_chart(query_data: dict):
     fig = Figure()
     axes: Axes = fig.add_subplot()
-    axes.bar(data["xvalues"], data["yvalues"])
-    axes.set_xlabel(data.get("xlabel", ""))
-    axes.set_ylabel(data.get("ylabel", ""))
-    axes.set_title(data.get("title", ""))
+    axes.bar(query_data["xvalues"], query_data["yvalues"])
+    axes.set_xlabel(query_data.get("xlabel", ""))
+    axes.set_ylabel(query_data.get("ylabel", ""))
+    axes.set_title(query_data.get("title", ""))
     axes.set_ylim(bottom=0)
     return send_figure_as_png(fig)
 
@@ -63,9 +63,9 @@ class PieChartParams(Schema):
 @app.get("/charts/pie")
 @app.input(PieChartParams, location="query")
 @app.output(ImageOutSchema, content_type="image/png")
-def pie_chart(data: dict):
+def pie_chart(query_data: dict):
     fig = Figure()
     axes: Axes = fig.add_subplot()
-    axes.pie(data["values"], labels=data.get("labels"))
-    axes.set_title(data.get("title"))
+    axes.pie(query_data["values"], labels=query_data.get("labels"))
+    axes.set_title(query_data.get("title"))
     return send_figure_as_png(fig)
