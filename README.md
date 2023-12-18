@@ -95,7 +95,7 @@ Run property-based tests:
 python3 -m pytest src/tests/property_based.py
 ```
 
-Both commands are also run as part of the CI/CD pipeline. If test coverage falls below 100%s, the pipeline will fail.
+Both commands are also run as part of the CI/CD pipeline. If test coverage falls below 100%, the pipeline will fail.
 
 ## Deployment
 
