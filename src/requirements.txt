@@ -1,4 +1,4 @@
-Flask==3.0.2
+Flask==3.0.3
 gunicorn==21.2.0
 matplotlib==3.8.4
 apiflask==2.1.1
