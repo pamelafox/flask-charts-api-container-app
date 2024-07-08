@@ -1,5 +1,5 @@
 Flask==3.0.3
 gunicorn==22.0.0
-matplotlib==3.9.0
+matplotlib==3.9.1
 apiflask==2.1.1
 marshmallow==3.21.3
