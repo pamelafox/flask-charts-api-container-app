@@ -6,3 +6,9 @@ __pycache__/
 .hypothesis/
 
 .coverage
+
+# Virtual environments
+.venv/
+test_env/
+venv/
+env/
