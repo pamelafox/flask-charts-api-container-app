@@ -6,3 +6,6 @@ __pycache__/
 .hypothesis/
 
 .coverage
+
+.venv/
+.venv_*/
