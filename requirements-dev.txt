@@ -5,5 +5,5 @@ pre-commit
 pytest
 pytest-cov
 coverage
-schemathesis
+schemathesis<4.0
 pillow
