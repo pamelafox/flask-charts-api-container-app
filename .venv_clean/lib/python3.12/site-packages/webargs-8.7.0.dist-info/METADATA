@@ -1,0 +1,166 @@
+Metadata-Version: 2.4
+Name: webargs
+Version: 8.7.0
+Summary: Declarative parsing and validation of HTTP request objects, with built-in support for popular web frameworks, including Flask, Django, Bottle, Tornado, Pyramid, Falcon, and aiohttp.
+Keywords: webargs,http,flask,django,bottle,tornado,aiohttp,request,arguments,validation,parameters,rest,api,marshmallow
+Author-email: Steven Loria <sloria1@gmail.com>
+Maintainer-email: Steven Loria <sloria1@gmail.com>, Jérôme Lafréchoux <jerome@jolimont.fr>, Stephen Rosen <sirosen0@gmail.com>
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Internet :: WWW/HTTP :: WSGI :: Application
+License-File: LICENSE
+Requires-Dist: marshmallow>=3.0.0
+Requires-Dist: packaging>=17.0
+Requires-Dist: webargs[tests] ; extra == "dev"
+Requires-Dist: tox ; extra == "dev"
+Requires-Dist: pre-commit>=3.5,<5.0 ; extra == "dev"
+Requires-Dist: webargs[frameworks] ; extra == "docs"
+Requires-Dist: Sphinx==8.2.3 ; extra == "docs"
+Requires-Dist: sphinx-issues==5.0.1 ; extra == "docs"
+Requires-Dist: furo==2024.8.6 ; extra == "docs"
+Requires-Dist: Flask>=0.12.5 ; extra == "frameworks"
+Requires-Dist: Django>=2.2.0 ; extra == "frameworks"
+Requires-Dist: bottle>=0.12.13 ; extra == "frameworks"
+Requires-Dist: tornado>=4.5.2 ; extra == "frameworks"
+Requires-Dist: pyramid>=1.9.1 ; extra == "frameworks"
+Requires-Dist: falcon>=2.0.0 ; extra == "frameworks"
+Requires-Dist: aiohttp>=3.0.8 ; extra == "frameworks"
+Requires-Dist: webargs[frameworks] ; extra == "tests"
+Requires-Dist: pytest ; extra == "tests"
+Requires-Dist: pytest-asyncio ; extra == "tests"
+Requires-Dist: webtest==3.0.4 ; extra == "tests"
+Requires-Dist: webtest-aiohttp==2.0.0 ; extra == "tests"
+Requires-Dist: pytest-aiohttp>=0.3.0 ; extra == "tests"
+Requires-Dist: packaging>=17.0 ; extra == "tests"
+Project-URL: Changelog, https://webargs.readthedocs.io/en/latest/changelog.html
+Project-URL: Funding, https://opencollective.com/marshmallow
+Project-URL: Issues, https://github.com/marshmallow-code/webargs/issues
+Project-URL: Source, https://github.com/marshmallow-code/webargs
+Project-URL: Tidelift, https://tidelift.com/subscription/pkg/pypi-webargs?utm_source=pypi-webargs&utm_medium=pypi
+Provides-Extra: dev
+Provides-Extra: docs
+Provides-Extra: frameworks
+Provides-Extra: tests
+
+*******
+webargs
+*******
+
+|pypi| |build-status| |docs| |marshmallow-support|
+
+.. |pypi| image:: https://badgen.net/pypi/v/webargs
+    :target: https://pypi.org/project/webargs/
+    :alt: PyPI package
+
+.. |build-status| image:: https://github.com/marshmallow-code/webargs/actions/workflows/build-release.yml/badge.svg
+    :target: https://github.com/marshmallow-code/webargs/actions/workflows/build-release.yml
+    :alt: Build status
+
+.. |docs| image:: https://readthedocs.org/projects/webargs/badge/
+   :target: https://webargs.readthedocs.io/
+   :alt: Documentation
+
+.. |marshmallow-support| image:: https://badgen.net/badge/marshmallow/3,4?list=1
+    :target: https://marshmallow.readthedocs.io/en/latest/upgrading.html
+    :alt: marshmallow 3|4 compatible
+
+Homepage: https://webargs.readthedocs.io/
+
+webargs is a Python library for parsing and validating HTTP request objects, with built-in support for popular web frameworks, including Flask, Django, Bottle, Tornado, Pyramid, Falcon, and aiohttp.
+
+.. code-block:: python
+
+    from flask import Flask
+    from webargs import fields
+    from webargs.flaskparser import use_args
+
+    app = Flask(__name__)
+
+
+    @app.route("/")
+    @use_args({"name": fields.Str(required=True)}, location="query")
+    def index(args):
+        return "Hello " + args["name"]
+
+
+    if __name__ == "__main__":
+        app.run()
+
+    # curl http://localhost:5000/\?name\='World'
+    # Hello World
+
+Install
+=======
+
+::
+
+    pip install -U webargs
+
+Documentation
+=============
+
+Full documentation is available at https://webargs.readthedocs.io/.
+
+Support webargs
+===============
+
+webargs is maintained by a group of 
+`volunteers <https://webargs.readthedocs.io/en/latest/authors.html>`_.
+If you'd like to support the future of the project, please consider
+contributing to our Open Collective:
+
+.. image:: https://opencollective.com/marshmallow/donate/button.png
+    :target: https://opencollective.com/marshmallow
+    :width: 200
+    :alt: Donate to our collective
+
+Professional Support
+====================
+
+Professionally-supported webargs is available through the
+`Tidelift Subscription <https://tidelift.com/subscription/pkg/pypi-webargs?utm_source=pypi-webargs&utm_medium=referral&utm_campaign=readme>`_.
+
+Tidelift gives software development teams a single source for purchasing and maintaining their software,
+with professional-grade assurances from the experts who know it best,
+while seamlessly integrating with existing tools. [`Get professional support`_]
+
+.. _`Get professional support`: https://tidelift.com/subscription/pkg/pypi-webargs?utm_source=pypi-webargs&utm_medium=referral&utm_campaign=readme
+
+.. image:: https://user-images.githubusercontent.com/2379650/45126032-50b69880-b13f-11e8-9c2c-abd16c433495.png
+    :target: https://tidelift.com/subscription/pkg/pypi-webargs?utm_source=pypi-webargs&utm_medium=referral&utm_campaign=readme
+    :alt: Get supported marshmallow with Tidelift
+
+Security Contact Information
+============================
+
+To report a security vulnerability, please use the
+`Tidelift security contact <https://tidelift.com/security>`_.
+Tidelift will coordinate the fix and disclosure.
+
+Project Links
+=============
+
+- Docs: https://webargs.readthedocs.io/
+- Changelog: https://webargs.readthedocs.io/en/latest/changelog.html
+- Contributing Guidelines: https://webargs.readthedocs.io/en/latest/contributing.html
+- PyPI: https://pypi.python.org/pypi/webargs
+- Issues: https://github.com/marshmallow-code/webargs/issues
+- Ecosystem / related packages: https://github.com/marshmallow-code/webargs/wiki/Ecosystem
+
+
+License
+=======
+
+MIT licensed. See the `LICENSE <https://github.com/marshmallow-code/webargs/blob/dev/LICENSE>`_ file for more details.
+

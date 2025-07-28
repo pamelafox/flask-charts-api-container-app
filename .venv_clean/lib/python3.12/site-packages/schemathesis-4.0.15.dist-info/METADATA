@@ -1,0 +1,204 @@
+Metadata-Version: 2.4
+Name: schemathesis
+Version: 4.0.15
+Summary: Property-based testing framework for Open API and GraphQL based apps
+Project-URL: Documentation, https://schemathesis.readthedocs.io/en/stable/
+Project-URL: Changelog, https://github.com/schemathesis/schemathesis/blob/master/CHANGELOG.md
+Project-URL: Bug Tracker, https://github.com/schemathesis/schemathesis
+Project-URL: Funding, https://github.com/sponsors/Stranger6667
+Project-URL: Source Code, https://github.com/schemathesis/schemathesis
+Author-email: Dmitry Dygalo <dmitry@dygalo.dev>
+Maintainer-email: Dmitry Dygalo <dmitry@dygalo.dev>
+License-Expression: MIT
+License-File: LICENSE
+Keywords: graphql,hypothesis,openapi,pytest,testing
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Framework :: Hypothesis
+Classifier: Framework :: Pytest
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Software Development :: Testing
+Requires-Python: >=3.9
+Requires-Dist: backoff<3.0,>=2.1.2
+Requires-Dist: click<9,>=8.0
+Requires-Dist: colorama<1.0,>=0.4
+Requires-Dist: harfile<1.0,>=0.3.0
+Requires-Dist: httpx<1.0,>=0.22.0
+Requires-Dist: hypothesis-graphql<1,>=0.11.1
+Requires-Dist: hypothesis-jsonschema<0.24,>=0.23.1
+Requires-Dist: hypothesis<7,>=6.108.0
+Requires-Dist: jsonschema[format]<5.0,>=4.18.0
+Requires-Dist: junit-xml<2.0,>=1.9
+Requires-Dist: pyrate-limiter<4.0,>=3.0
+Requires-Dist: pytest-subtests<0.15.0,>=0.11
+Requires-Dist: pytest<9,>=8
+Requires-Dist: pyyaml<7.0,>=5.1
+Requires-Dist: requests<3,>=2.22
+Requires-Dist: rich>=13.9.4
+Requires-Dist: starlette-testclient<1,>=0.4.1
+Requires-Dist: tomli>=2.2.1
+Requires-Dist: typing-extensions>=4.12.2
+Requires-Dist: werkzeug<4,>=0.16.0
+Provides-Extra: bench
+Requires-Dist: pytest-codspeed==2.2.1; extra == 'bench'
+Provides-Extra: cov
+Requires-Dist: coverage-enable-subprocess; extra == 'cov'
+Requires-Dist: coverage[toml]>=5.3; extra == 'cov'
+Provides-Extra: dev
+Requires-Dist: aiohttp<4.0,>=3.9.1; extra == 'dev'
+Requires-Dist: coverage-enable-subprocess; extra == 'dev'
+Requires-Dist: coverage>=6; extra == 'dev'
+Requires-Dist: coverage[toml]>=5.3; extra == 'dev'
+Requires-Dist: fastapi>=0.86.0; extra == 'dev'
+Requires-Dist: flask<3.0,>=2.1.1; extra == 'dev'
+Requires-Dist: hypothesis-openapi<1,>=0.2; (python_version >= '3.10') and extra == 'dev'
+Requires-Dist: mkdocs-material; extra == 'dev'
+Requires-Dist: mkdocstrings[python]; extra == 'dev'
+Requires-Dist: pydantic>=1.10.2; extra == 'dev'
+Requires-Dist: pytest-asyncio<1.0,>=0.18.0; extra == 'dev'
+Requires-Dist: pytest-codspeed==2.2.1; extra == 'dev'
+Requires-Dist: pytest-httpserver<2.0,>=1.0; extra == 'dev'
+Requires-Dist: pytest-mock<4.0,>=3.7.0; extra == 'dev'
+Requires-Dist: pytest-trio<1.0,>=0.8; extra == 'dev'
+Requires-Dist: pytest-xdist<4.0,>=3; extra == 'dev'
+Requires-Dist: strawberry-graphql[fastapi]>=0.109.0; extra == 'dev'
+Requires-Dist: syrupy<5.0,>=2; extra == 'dev'
+Requires-Dist: tomli-w>=1.2.0; extra == 'dev'
+Requires-Dist: trustme<1.0,>=0.9.0; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: mkdocs-material; extra == 'docs'
+Requires-Dist: mkdocstrings[python]; extra == 'docs'
+Provides-Extra: tests
+Requires-Dist: aiohttp<4.0,>=3.9.1; extra == 'tests'
+Requires-Dist: coverage>=6; extra == 'tests'
+Requires-Dist: fastapi>=0.86.0; extra == 'tests'
+Requires-Dist: flask<3.0,>=2.1.1; extra == 'tests'
+Requires-Dist: hypothesis-openapi<1,>=0.2; (python_version >= '3.10') and extra == 'tests'
+Requires-Dist: pydantic>=1.10.2; extra == 'tests'
+Requires-Dist: pytest-asyncio<1.0,>=0.18.0; extra == 'tests'
+Requires-Dist: pytest-httpserver<2.0,>=1.0; extra == 'tests'
+Requires-Dist: pytest-mock<4.0,>=3.7.0; extra == 'tests'
+Requires-Dist: pytest-trio<1.0,>=0.8; extra == 'tests'
+Requires-Dist: pytest-xdist<4.0,>=3; extra == 'tests'
+Requires-Dist: strawberry-graphql[fastapi]>=0.109.0; extra == 'tests'
+Requires-Dist: syrupy<5.0,>=2; extra == 'tests'
+Requires-Dist: tomli-w>=1.2.0; extra == 'tests'
+Requires-Dist: trustme<1.0,>=0.9.0; extra == 'tests'
+Description-Content-Type: text/markdown
+
+<p align="center">
+    <a href="https://github.com/schemathesis/schemathesis/actions" target="_blank">
+        <img src="https://github.com/schemathesis/schemathesis/actions/workflows/build.yml/badge.svg" alt="Build">
+    </a>
+    <a href="https://codecov.io/gh/schemathesis/schemathesis/branch/master" target="_blank">
+        <img src="https://codecov.io/gh/schemathesis/schemathesis/branch/master/graph/badge.svg" alt="Coverage">
+    </a>
+    <a href="https://pypi.org/project/schemathesis/" target="_blank">
+        <img src="https://img.shields.io/pypi/v/schemathesis.svg" alt="Version">
+    </a>
+    <a href="https://pypi.org/project/schemathesis/" target="_blank">
+        <img src="https://img.shields.io/pypi/pyversions/schemathesis.svg" alt="Python versions">
+    </a>
+    <a href="https://discord.gg/R9ASRAmHnA" target="_blank">
+        <img src="https://img.shields.io/discord/938139740912369755" alt="Discord">
+    </a>
+    <a href="https://opensource.org/licenses/MIT" target="_blank">
+        <img src="https://img.shields.io/pypi/l/schemathesis.svg" alt="License">
+    </a>
+</p>
+
+## Schemathesis
+
+> **Catch API bugs before your users do.** 
+
+Schemathesis automatically generates thousands of test cases from your OpenAPI or GraphQL schema and finds edge cases that break your API.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/schemathesis/schemathesis/master/img/demo.gif" alt="Schemathesis automatically finding a server error"/>
+  <br>
+  <i>Finding bugs that manual testing missed</i>
+</p>
+
+## Try it now
+
+```console
+# Test a demo API - finds real bugs instantly
+uvx schemathesis run https://example.schemathesis.io/openapi.json
+
+# Test your own API
+uvx schemathesis run https://your-api.com/openapi.json
+```
+
+
+## What problems does it solve?
+
+- 💥 **500 errors** that crash your API on edge case inputs
+- 📋 **Schema violations** where your API returns different data than documented  
+- 🚪 **Validation bypasses** where invalid data gets accepted
+- 🔗 **Integration failures** when responses don't match client expectations
+
+
+> ⚠️ **Upgrading from older versions?** Check our [Migration Guide](https://github.com/schemathesis/schemathesis/blob/master/MIGRATION.md) for key changes.
+
+# Installation & Usage
+
+**Command Line:**
+```console
+uv pip install schemathesis
+schemathesis run https://your-api.com/openapi.json
+```
+
+**Python Tests:**
+```python
+import schemathesis
+
+schema = schemathesis.openapi.from_url("https://your-api.com/openapi.json")
+
+@schema.parametrize()
+def test_api(case):
+    case.call_and_validate()  # Finds bugs automatically
+```
+
+**CI/CD:**
+```yaml
+- uses: schemathesis/action@v2
+  with:
+    schema: "https://your-api.com/openapi.json"
+```
+
+## Who uses it
+
+Used by teams at **[Spotify](https://github.com/backstage/backstage)**, **[WordPress](https://github.com/WordPress/openverse)**, **JetBrains**, **Red Hat** and dozens other companies.
+
+
+> "_Schemathesis is the best tool for fuzz testing of REST API on the market. We are at Red Hat use it for examining our applications in functional and integrations testing levels._" - Dmitry Misharov, RedHat
+
+## Documentation
+
+📚 **[Complete documentation](https://schemathesis.readthedocs.io/en/stable/)** with guides, examples, and API reference.
+
+## Get Help
+
+- 💬 [Discord community](https://discord.gg/R9ASRAmHnA)
+- 🐛 [GitHub issues](https://github.com/schemathesis/schemathesis/issues)
+
+## Contributing
+
+We welcome contributions! See our [contributing guidelines](CONTRIBUTING.md) and join discussions in [issues](https://github.com/schemathesis/schemathesis/issues) or [Discord](https://discord.gg/R9ASRAmHnA).
+
+## Acknowledgements
+
+Schemathesis is built on top of <a href="https://hypothesis.works/" target="_blank">Hypothesis</a>, a powerful property-based testing library for Python.
+
+## License
+
+This project is licensed under the terms of the [MIT license](https://opensource.org/licenses/MIT).
