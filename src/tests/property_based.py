@@ -4,7 +4,7 @@ from hypothesis import settings
 
 from api import app
 
-schema = schemathesis.from_wsgi("/openapi.json", app)
+schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
 
 
 @schema.parametrize()
