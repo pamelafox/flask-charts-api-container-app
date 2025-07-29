@@ -11,5 +11,5 @@ schema = schemathesis.openapi.from_wsgi("/openapi.json", app)
 @settings(print_blob=True, report_multiple_bugs=False)
 @pytest.mark.filterwarnings("ignore:Glyph:UserWarning")
 def test_api(case):
-    response = case.call_wsgi()
+    response = schema.transport.send(case, app=app)
     case.validate_response(response)
