@@ -14,6 +14,6 @@ def test_api(case):
     response = case.call()
     # Property-based test: ensure API doesn't crash and returns reasonable responses
     assert response.status_code in [200, 422, 400, 404, 405, 500], f"Unexpected status code: {response.status_code}"
-    
+
     # For any response, ensure we get some content
-    assert hasattr(response, 'content'), "Response should have content"
+    assert hasattr(response, "content"), "Response should have content"
