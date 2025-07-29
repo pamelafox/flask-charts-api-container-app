@@ -9,6 +9,5 @@ __pycache__/
 
 # Virtual environments
 .venv/
-test_env/
 venv/
 env/
