@@ -1,5 +1,6 @@
 
 .azure
+.venv/
 
 __pycache__/
 
