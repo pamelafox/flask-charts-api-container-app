@@ -1,8 +1,10 @@
-[tool.ruff.lint]
-select = ["E", "F", "I", "UP"]
+[tool.ruff]
 target-version = "py311"
 line-length = 200
 src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
 
 [tool.black]
 target-version =  ["py311"]
